@@ -38,7 +38,7 @@ use bdesprez\psmodulefwk\helpers\LoggerFactory;
 class PsModuleFwk extends Module
 {
     // Version interne modifiée automatiquement lors du packaging
-    public $internalVersion = '201907191117';
+    public $internalVersion = '201907230022';
 
     /**
      * Constructeur
