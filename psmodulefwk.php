@@ -28,8 +28,8 @@ if (!defined('_PS_VERSION_'))
 
 require_once __DIR__ . '/autoload.php';
 
-use xlsoft\fwk\helpers\Logger;
-use xlsoft\fwk\helpers\LoggerFactory;
+use bdesprez\psmodulefwk\helpers\Logger;
+use bdesprez\psmodulefwk\helpers\LoggerFactory;
 
 /**
  * Class PsModuleFwk
@@ -94,7 +94,7 @@ class PsModuleFwk extends Module
      */
     public function hookActionAdminControllerSetMedia()
     {
-        $moduleName = \xlsoft\fwk\helpers\StdClass::getInstance((object) $this->context->smarty->tpl_vars)->get('module_name')->getValeur('value');
+        $moduleName = \bdesprez\psmodulefwk\helpers\StdClass::getInstance((object) $this->context->smarty->tpl_vars)->get('module_name')->getValeur('value');
         $this->getLogger()->log('Module context : ' . $moduleName);
         if ($moduleName && in_array($this->name, Module::getInstanceByName($moduleName)->dependencies)) {
             $this->context->controller->addJS($this->_path . '/views/js/main.js');
