@@ -72,7 +72,7 @@ abstract class MyModule extends Module
     {
         $this->name = Tools::strtolower(static::getSimpleName());
         $this->tab = 'administration';
-        $this->author = 'XLSoft';
+        $this->author = 'BrunoJunior <pro@bdesprez.com>';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array('min' => '1.6.0.9', 'max' => _PS_VERSION_);
         $this->bootstrap = true;
@@ -90,7 +90,7 @@ abstract class MyModule extends Module
             $this->addProcessAjax($process);
         }
         $this->configurations = $this->getModuleConfigurations();
-        $this->dependencies = array_merge(['xlposfwk'], $this->getDependencies());
+        $this->dependencies = array_merge(['psmodulefwk'], $this->getDependencies());
         $this->confirmUninstall = $this->l('Are you sure to unistall?');
     }
 

@@ -33,7 +33,7 @@ require _PS_MODULE_DIR_ . '[module]/autoload.php';
 use bdesprez\psmodulefwk\MyModule;
 
 /**
- * Module XLPOS pour Export des images des produits
+ *
  */
 class [Module] extends MyModule
 {
