@@ -48,10 +48,10 @@ class InputCheckbox extends InputFormValues
      * @param array $values
      * @return InputCheckbox
      */
-    public static function getInstance(ILabeledKeys $labeledKeys, $name, array $values)
+    public static function getInstance(ILabeledKeys $labeledKeys, $name, array $queryResult, $idColonne, $nameColonne)
     {
         $input = new InputCheckbox($name, $labeledKeys->getLabelByKey($name));
-        $input->values = $values;
+        $input->values = ['query' => $queryResult, 'id' => $idColonne, 'name' => $nameColonne];
         return $input;
     }
 
