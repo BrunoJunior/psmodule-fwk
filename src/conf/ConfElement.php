@@ -121,6 +121,7 @@ class ConfElement
      */
     public function treatSubmit()
     {
-        Conf::setValeur($this->input->getName(), $this->input->getSubmittedValue($this->defaultValue), $this->allShops);
+        $submitValue = $this->input->getSubmittedValue($this->defaultValue);
+        Conf::setValeur($this->input->getName(), $submitValue, $this->allShops);
     }
 }

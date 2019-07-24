@@ -5,6 +5,7 @@ namespace bdesprez\psmodulefwk\form;
 
 use bdesprez\psmodulefwk\ILabeledKeys;
 use HelperForm;
+use Tools;
 
 abstract class InputFormWithOptions extends InputLabeledKeys
 {
@@ -57,9 +58,9 @@ abstract class InputFormWithOptions extends InputLabeledKeys
      */
     public function getSubmittedValue($default = [])
     {
-        return array_filter(array_keys($this->getOptions()->getValues()), function ($id) {
-            return \Tools::getValue($this->getName() . '_' . $id);
-        });
+        return array_values(array_filter(array_keys($this->getOptions()->getValues()), function ($id) {
+            return Tools::getValue($this->getName() . '_' . $id);
+        }));
     }
 
     /**

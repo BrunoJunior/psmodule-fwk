@@ -432,13 +432,10 @@ abstract class MyModule extends Module
     {
         $output = null;
         foreach ($this->configurations as $configuration) {
-            if (Tools::isSubmit($configuration->getSubmitName())) {
-                try {
-                    $output = $configuration->treatSubmit();
-                } catch (Exception $exception) {
-                    $output = $this->displayError($exception->getMessage());
-                }
-                break;
+            try {
+                $output .= $configuration->treatSubmit();
+            } catch (Exception $exception) {
+                $output .= $this->displayError($exception->getMessage());
             }
         }
         return $output;

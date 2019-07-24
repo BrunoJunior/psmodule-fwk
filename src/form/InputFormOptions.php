@@ -29,15 +29,15 @@ class InputFormOptions
      */
     public function __construct(array $query, $idKey = 'id', $valueKey = 'value')
     {
+        $this->query = $query;
+        $this->idKey = $idKey;
+        $this->valueKey = $valueKey;
         foreach ($query as $row) {
             if (!array_key_exists($idKey, $row) || !array_key_exists($valueKey, $row)) {
                 throw new PrestaShopModuleException("Query results has to contain at least the keys \"{$idKey}\" and \"{$valueKey}\" !");
             }
             $this->values[$row[$this->idKey]] = $row[$this->valueKey];
         }
-        $this->query = $query;
-        $this->idKey = $idKey;
-        $this->valueKey = $valueKey;
     }
 
     /**

@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    BJ <perso@bdesprez.com>
- *  @copyright 2019 BJ
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    BJ <perso@bdesprez.com>
+ * @copyright 2019 BJ
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 namespace bdesprez\psmodulefwk\conf;
@@ -28,10 +28,6 @@ namespace bdesprez\psmodulefwk\conf;
 use HelperForm;
 use Tools;
 use bdesprez\psmodulefwk\form\Form;
-use bdesprez\psmodulefwk\form\InputForm;
-use bdesprez\psmodulefwk\form\InputSelect;
-use bdesprez\psmodulefwk\form\InputText;
-use bdesprez\psmodulefwk\helpers\Conf;
 use bdesprez\psmodulefwk\ILabeledKeys;
 use bdesprez\psmodulefwk\MyModule;
 use bdesprez\psmodulefwk\TranslationTrait;
@@ -178,6 +174,8 @@ abstract class ModuleConfiguration implements ILabeledKeys
     public function treatSubmit()
     {
         $output = null;
+        $this->getLogger()->log('Try submit config ' . $this->getName());
+        $this->getLogger()->log('Is submitted (' . $this->getSubmitName() . ') : ' . Tools::isSubmit($this->getSubmitName()) ? 'OUI' : 'NON');
         if (Tools::isSubmit($this->getSubmitName())) {
             foreach ($this->getElements() as $element) {
                 $element->treatSubmit();

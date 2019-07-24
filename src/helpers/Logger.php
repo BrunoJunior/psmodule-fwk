@@ -28,6 +28,7 @@ namespace bdesprez\psmodulefwk\helpers;
 use DateInterval;
 use DateTime;
 use Exception;
+use Shop;
 
 /**
  * Class Logger
@@ -122,8 +123,8 @@ class Logger
      */
     private function getShopContextStr()
     {
-        $map = [\Shop::CONTEXT_SHOP =>'Boutique', \Shop::CONTEXT_GROUP => 'Groupe', \Shop::CONTEXT_ALL => 'Toutes'];
-        return implode(', ', array_filter($map, function ($context) {return \Shop::getContext() & $context;}, ARRAY_FILTER_USE_KEY));
+        $map = [Shop::CONTEXT_SHOP =>'Boutique', Shop::CONTEXT_GROUP => 'Groupe', Shop::CONTEXT_ALL => 'Toutes'];
+        return implode(', ', array_filter($map, function ($context) {return Shop::getContext() & $context;}, ARRAY_FILTER_USE_KEY));
     }
 
     /**
@@ -135,7 +136,7 @@ class Logger
      */
     public function log($message, $filename = '', $is_date = true, $level = 0)
     {
-        $message = ' - [#' . \Shop::getContextShopID() . ' - ' . $this->getShopContextStr() . '] ' . $message;
+        $message = ' - [#' . Shop::getContextShopID() . ' - ' . $this->getShopContextStr() . '] ' . $message;
         if ($level >= $this->getLevel()) {
             if (!empty($filename) && substr($filename, -4) == '.txt') {
                 $filename = substr($filename, 0, -4);
@@ -157,7 +158,7 @@ class Logger
      */
     private function getLogsDir()
     {
-        $dir = _PS_MODULE_DIR_ . "/xlposfwk/logs/{$this->moduleName}/";
+        $dir = _PS_MODULE_DIR_ . "/psmodulefwk/logs/{$this->moduleName}/";
         if (!file_exists($dir)) {
             mkdir($dir);
         }
