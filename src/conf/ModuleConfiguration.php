@@ -67,10 +67,10 @@ abstract class ModuleConfiguration implements ILabeledKeys
     }
 
     /**
-     * Quels sont les éléments de configuration ?
+     * La liste des éléments de la configuration
      * @return array|ConfElement[]
      */
-    abstract protected function getSimpleConfElements();
+    abstract protected function getElements();
 
     /**
      * Installation complémentaire en cas de besoin
@@ -87,11 +87,9 @@ abstract class ModuleConfiguration implements ILabeledKeys
     final public function install()
     {
         $ok = true;
-        foreach ($this->getSimpleConfElements() as $element) {
-            $ok &= Conf::setValeur($element->getName(), $element->getDefaultValue(), $element->isAllShops());
-            if (!$ok) {
-                break;
-            }
+        $elements = $this->getElements();
+        for ($i = 0; $ok && $i < count($elements); $i++) {
+            $ok = $elements[$i]->install();
         }
         if ($ok) {
             $ok = $this->complementaryInstall();
@@ -114,14 +112,12 @@ abstract class ModuleConfiguration implements ILabeledKeys
     /**
      * @return bool
      */
-    public function uninstall()
+    final public function uninstall()
     {
         $ok = $this->complementaryUninstall();
-        foreach ($this->getSimpleConfElements() as $element) {
-            $ok &= Conf::removeValeur($element->getName());
-            if (!$ok) {
-                break;
-            }
+        $elements = $this->getElements();
+        for ($i = 0; $ok && $i < count($elements); $i++) {
+            $ok = $elements[$i]->uninstall();
         }
         if (!$ok) {
             $this->module->addError($this->l('Configuration uninstall error!'));
@@ -155,33 +151,14 @@ abstract class ModuleConfiguration implements ILabeledKeys
     }
 
     /**
-     * Récupération des inputs pour le formulaire
-     * À surcharger pour la plupast des cas
-     * @return array|InputForm[]
-     */
-    protected function getInputs()
-    {
-        $inputs = [];
-        foreach ($this->getSimpleConfElements() as $element) {
-            $possibleValues = $element->getPossibleValues();
-            if (!empty($possibleValues)) {
-                $inputs[] = InputSelect::getInstance($this, $element->getName(), InputSelect::arrayToOptions(array_map(function ($value) {return ['id' => $value, 'value' => $value];}, $possibleValues)));
-            } else {
-                $inputs[] = InputText::getInstance($this, $element->getName());
-            }
-        }
-        return $inputs;
-    }
-
-    /**
      * Affichage du formulaire de configuration
      * @return Form
      */
     public function render()
     {
         $form = Form::getInstance($this->getName(), $this->l('Save'))->setSubmitName($this->getSubmitName())->setIcon($this->getIcon());
-        foreach ($this->getInputs() as $input) {
-            $form->addInput($input);
+        foreach ($this->getElements() as $element) {
+            $form->addInput($element->getInput());
         }
         return $form;
     }
@@ -202,13 +179,8 @@ abstract class ModuleConfiguration implements ILabeledKeys
     {
         $output = null;
         if (Tools::isSubmit($this->getSubmitName())) {
-            foreach ($this->getSimpleConfElements() as $element) {
-                $sentValue = Tools::getValue($element->getName(), $element->getDefaultValue());
-                $valeursPossible = $element->getPossibleValues();
-                if (!empty($valeursPossible) && !in_array($sentValue, $valeursPossible)) {
-                    $output .= $this->module->displayError(sprintf($this->l('The value "%s" is forbidden for "%s! Only %s are valid!"'), $sentValue, $element->getName(), implode(', ', $valeursPossible)));
-                }
-                Conf::setValeur($element->getName(), Tools::getValue($element->getName(), $element->getDefaultValue()), $element->isAllShops());
+            foreach ($this->getElements() as $element) {
+                $element->treatSubmit();
             }
             $output .= $this->complementarySubmitTreatment();
         }
@@ -221,8 +193,8 @@ abstract class ModuleConfiguration implements ILabeledKeys
      */
     public function fillForm(HelperForm $form)
     {
-        foreach ($this->getSimpleConfElements() as $element) {
-            $form->fields_value[$element->getName()] = Conf::getValeur($element->getName());
+        foreach ($this->getElements() as $element) {
+            $element->fillForm($form);
         }
     }
 }

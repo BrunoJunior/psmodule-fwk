@@ -32,44 +32,21 @@ use bdesprez\psmodulefwk\ILabeledKeys;
  *
  * @author bruno
  */
-class InputSwitch extends InputFormValues
+class InputSwitch extends InputFormWithValues
 {
-
     /**
-     * Switch 0 / 1
+     * InputSwitch constructor.
      * @param ILabeledKeys $labeledKeys
-     * @param string $name
-     * @param string $activeLabel
-     * @param string $inactiveLabel
-     * @return InputSwitch
+     * @param $name
+     * @param null $activeLabel
+     * @param null $inactiveLabel
      */
-    public static function getInstance(ILabeledKeys $labeledKeys, $name, $activeLabel = null, $inactiveLabel = null)
+    public function __construct(ILabeledKeys $labeledKeys, $name, $activeLabel = null, $inactiveLabel = null)
     {
-        $input = new InputSwitch($name, $labeledKeys->getLabelByKey($name));
-        $input->values = [
-            [
-                'id' => 'active_on',
-                'value' => 1,
-                'label' => $activeLabel,
-            ],
-            [
-                'id' => 'active_off',
-                'value' => 0,
-                'label' => $inactiveLabel,
-            ]
-        ];
-        return $input;
-    }
-
-    /**
-     * Attributs spécifiques au type
-     * @return array
-     */
-    protected function getPrestaShopArrayFormat()
-    {
-        return [
-            'values' => $this->values,
-        ];
+        parent::__construct($labeledKeys, $name, [
+            new InputFormValue('active_on', 1, $activeLabel),
+            new InputFormValue('active_off', 0, $inactiveLabel)
+        ]);
     }
 
     /**

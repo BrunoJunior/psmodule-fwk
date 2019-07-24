@@ -30,20 +30,8 @@ namespace bdesprez\psmodulefwk\form;
  *
  * @author bruno
  */
-class InputFree extends InputForm
+class InputFree extends InputLabeledKeys
 {
-
-    /**
-     * Input free instance
-     * @param string $name
-     * @param string $label
-     * @return InputFree
-     */
-    public static function getInstance($name, $label)
-    {
-        return new InputFree($name, $label);
-    }
-
     /**
      * free
      * @return string
@@ -52,5 +40,4 @@ class InputFree extends InputForm
     {
         return static::TYPE_FREE;
     }
-
 }

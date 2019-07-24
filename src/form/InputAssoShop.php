@@ -30,20 +30,8 @@ namespace bdesprez\psmodulefwk\form;
  *
  * @author bruno
  */
-class InputAssoShop extends InputForm
+class InputAssoShop extends InputLabeledKeys
 {
-
-    /**
-     * Input asso shop instance
-     * @param string $name
-     * @param string $label
-     * @return InputAssoShop
-     */
-    public static function getInstance($name, $label)
-    {
-        return new InputAssoShop($name, $label);
-    }
-
     /**
      * asso_shop
      * @return string
@@ -52,5 +40,4 @@ class InputAssoShop extends InputForm
     {
         return static::TYPE_ASSO_SHOP;
     }
-
 }

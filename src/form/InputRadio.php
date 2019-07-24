@@ -25,12 +25,14 @@
 
 namespace bdesprez\psmodulefwk\form;
 
+use bdesprez\psmodulefwk\ILabeledKeys;
+
 /**
  * Description of InputRadio
  *
  * @author bruno
  */
-class InputRadio extends InputFormValues
+class InputRadio extends InputFormWithValues
 {
 
     /**
@@ -40,19 +42,16 @@ class InputRadio extends InputFormValues
     private $isBool;
 
     /**
-     * Radio button
-     * @param string $name
-     * @param string $label
-     * @param array $values
-     * @param boolean $isBool
-     * @return InputRadio
+     * InputRadio constructor.
+     * @param ILabeledKeys $labeledKeys
+     * @param $name
+     * @param array|InputFormValue[] $values
+     * @param bool $isBool
      */
-    public static function getInstance($name, $label, array $values, $isBool = false)
+    public function __construct(ILabeledKeys $labeledKeys, $name, array $values, $isBool = false)
     {
-        $input = new InputRadio($name, $label);
-        $input->isBool = $isBool;
-        $input->values = $values;
-        return $input;
+        parent::__construct($labeledKeys, $name, $values);
+        $this->isBool = $isBool;
     }
 
     /**
@@ -61,10 +60,7 @@ class InputRadio extends InputFormValues
      */
     protected function getPrestaShopArrayFormat()
     {
-        return [
-            'values' => $this->values,
-            'is_bool' => $this->isBool,
-        ];
+        return array_merge(parent::getPrestaShopArrayFormat(), ['is_bool' => $this->isBool]);
     }
 
     /**

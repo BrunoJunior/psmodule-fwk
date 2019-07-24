@@ -25,14 +25,12 @@
 
 namespace bdesprez\psmodulefwk\form;
 
-use bdesprez\psmodulefwk\ILabeledKeys;
-
 /**
  * Description of InputCheckbox
  *
  * @author bruno
  */
-class InputCheckbox extends InputFormValues
+class InputCheckbox extends InputFormWithOptions
 {
 
     /**
@@ -40,20 +38,6 @@ class InputCheckbox extends InputFormValues
      * @var array
      */
     private $expandOptions;
-
-    /**
-     * Action button
-     * @param ILabeledKeys $labeledKeys
-     * @param string $name
-     * @param array $values
-     * @return InputCheckbox
-     */
-    public static function getInstance(ILabeledKeys $labeledKeys, $name, array $queryResult, $idColonne, $nameColonne)
-    {
-        $input = new InputCheckbox($name, $labeledKeys->getLabelByKey($name));
-        $input->values = ['query' => $queryResult, 'id' => $idColonne, 'name' => $nameColonne];
-        return $input;
-    }
 
     /**
      * Expend options
@@ -67,15 +51,20 @@ class InputCheckbox extends InputFormValues
     }
 
     /**
+     * @return string
+     */
+    protected function getOptionsKeyInPsFormat()
+    {
+        return 'values';
+    }
+
+    /**
      * Attributs spécifiques au type
      * @return array
      */
     protected function getPrestaShopArrayFormat()
     {
-        return [
-            'values' => $this->values,
-            'expand' => $this->expandOptions,
-        ];
+        return array_merge(parent::getPrestaShopArrayFormat(), ['expand' => $this->expandOptions]);
     }
 
     /**

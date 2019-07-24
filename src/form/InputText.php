@@ -25,27 +25,13 @@
 
 namespace bdesprez\psmodulefwk\form;
 
-use bdesprez\psmodulefwk\ILabeledKeys;
-
 /**
  * Description of InputText
  *
  * @author bruno
  */
-class InputText extends InputForm
+class InputText extends InputLabeledKeys
 {
-
-    /**
-     * Input text instance
-     * @param ILabeledKeys $labeledKeys
-     * @param string $name
-     * @return InputText
-     */
-    public static function getInstance(ILabeledKeys $labeledKeys,$name)
-    {
-        return new InputText($name, $labeledKeys->getLabelByKey($name));
-    }
-
     /**
      * text
      * @return string

@@ -25,63 +25,52 @@
 
 namespace bdesprez\psmodulefwk\form;
 
-use bdesprez\psmodulefwk\ILabeledKeys;
-
 /**
- * Description of InputMapping
+ * Description of InputFormValue
  *
  * @author bruno
  */
-class InputMapping extends InputForm
+class InputFormValue
 {
+    /**
+     * @var string
+     */
+    private $id;
+    /**
+     * @var string
+     */
+    private $value;
 
     /**
-     * Mapping rows
-     * @var array
+     * @var string|null
      */
-    private $rows;
+    private $label;
 
     /**
-     * Mapping features
-     * @var array
+     * InputFormValue constructor.
+     * @param $id
+     * @param $value
+     * @param null $label
      */
-    private $features;
-
-    /**
-     * Features mapping
-     * @param ILabeledKeys $labeledKeys
-     * @param string $name
-     * @param array $rows
-     * @param array $features
-     * @return InputMapping
-     */
-    public static function getInstance(ILabeledKeys $labeledKeys, $name, array $rows, array $features)
+    public function __construct($id, $value, $label = null)
     {
-        $input = new InputMapping($name, $labeledKeys->getLabelByKey($name));
-        $input->rows = $rows;
-        $input->features = $features;
-        return $input;
+        $this->id = $id;
+        $this->value = $value;
+        $this->label = $label;
     }
 
     /**
-     * text
-     * @return string
-     */
-    protected function getType()
-    {
-        return static::TYPE_MAPPING;
-    }
-
-    /**
-     * Attributs spécifiques au type
      * @return array
      */
-    protected function getPrestaShopArrayFormat()
+    public function toPrestaShopFormat()
     {
-        return [
-            'rows' => $this->rows,
-            'features' => $this->features,
+        $psFormat = [
+            'id' => $this->id,
+            'value' => $this->value
         ];
+        if ($this->label) {
+            $psFormat['label'] = $this->label;
+        }
+        return $psFormat;
     }
-
 }

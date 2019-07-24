@@ -25,27 +25,13 @@
 
 namespace bdesprez\psmodulefwk\form;
 
-use bdesprez\psmodulefwk\ILabeledKeys;
-
 /**
  * Description of InputDate
  *
  * @author bruno
  */
-class InputDate extends InputForm
+class InputDate extends InputLabeledKeys
 {
-
-    /**
-     * Input file instance
-     * @param ILabeledKeys $labeledKeys
-     * @param string $name
-     * @return InputDate
-     */
-    public static function getInstance(ILabeledKeys $labeledKeys, $name)
-    {
-        return new InputDate($name, $labeledKeys->getLabelByKey($name));
-    }
-
     /**
      * date
      * @return string

@@ -30,20 +30,8 @@ namespace bdesprez\psmodulefwk\form;
  *
  * @author bruno
  */
-class InputFile extends InputForm
+class InputFile extends InputLabeledKeys
 {
-
-    /**
-     * Input file instance
-     * @param string $name
-     * @param string $label
-     * @return InputFile
-     */
-    public static function getInstance($name, $label)
-    {
-        return new InputFile($name, $label);
-    }
-
     /**
      * file
      * @return string

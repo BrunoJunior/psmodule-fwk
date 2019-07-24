@@ -30,20 +30,8 @@ namespace bdesprez\psmodulefwk\form;
  *
  * @author bruno
  */
-class InputTextarea extends InputForm
+class InputTextarea extends InputLabeledKeys
 {
-
-    /**
-     * Input textarea instance
-     * @param string $name
-     * @param string $label
-     * @return InputTextarea
-     */
-    public static function getInstance($name, $label)
-    {
-        return new InputTextarea($name, $label);
-    }
-
     /**
      * textarea
      * @return string

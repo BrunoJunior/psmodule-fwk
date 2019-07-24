@@ -30,20 +30,8 @@ namespace bdesprez\psmodulefwk\form;
  *
  * @author bruno
  */
-class InputColor extends InputForm
+class InputColor extends InputLabeledKeys
 {
-
-    /**
-     * Input color instance
-     * @param string $name
-     * @param string $label
-     * @return InputColor
-     */
-    public static function getInstance($name, $label)
-    {
-        return new InputColor($name, $label);
-    }
-
     /**
      * free
      * @return string
@@ -52,5 +40,4 @@ class InputColor extends InputForm
     {
         return static::TYPE_COLOR;
     }
-
 }

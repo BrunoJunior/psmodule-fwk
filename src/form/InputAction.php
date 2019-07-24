@@ -32,7 +32,7 @@ use bdesprez\psmodulefwk\ILabeledKeys;
  *
  * @author bruno
  */
-class InputAction extends InputForm
+class InputAction extends InputLabeledKeys
 {
 
     /**
@@ -44,15 +44,13 @@ class InputAction extends InputForm
     /**
      * Action button
      * @param ILabeledKeys $labeledKeys
-     * @param string $name
-     * @param string $action
-     * @return InputAction
+     * @param $name
+     * @param $action
      */
-    public static function getInstance(ILabeledKeys $labeledKeys, $name, $action)
+    public function __construct(ILabeledKeys $labeledKeys, $name, $action)
     {
-        $input = new InputAction($name, $labeledKeys->getLabelByKey($name));
-        $input->action = $action;
-        return $input;
+        parent::__construct($labeledKeys, $name);
+        $this->action = $action;
     }
 
     /**

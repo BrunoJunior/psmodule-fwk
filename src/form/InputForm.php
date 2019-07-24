@@ -25,6 +25,9 @@
 
 namespace bdesprez\psmodulefwk\form;
 
+use HelperForm;
+use Tools;
+
 /**
  * Description of InputForm
  *
@@ -46,7 +49,6 @@ abstract class InputForm
     const TYPE_SWITCH = 'switch';
     const TYPE_DATE = 'date';
     const TYPE_ACTION = 'action';
-    const TYPE_MAPPING = 'mapping';
 
     /**
      * Theoretically optional, but in reality each field has to have a label
@@ -119,7 +121,7 @@ abstract class InputForm
      * @param string $name
      * @param string $label
      */
-    protected function __construct($name, $label)
+    public function __construct($name, $label)
     {
         $this->name = $name;
         $this->label = $label;
@@ -197,7 +199,7 @@ abstract class InputForm
      * @param boolean $lang
      * @return $this
      */
-    public function isLang($lang = true)
+    final public function isLang($lang = true)
     {
         $this->lang = $lang;
         return $this;
@@ -208,7 +210,7 @@ abstract class InputForm
      * @param boolean $show
      * @return $this
      */
-    public function isShow($show = true)
+    final public function isShow($show = true)
     {
         $this->show = $show;
         return $this;
@@ -219,7 +221,7 @@ abstract class InputForm
      * @param boolean $readOnly
      * @return $this
      */
-    public function isReadOnly($readOnly = true)
+    final public function isReadOnly($readOnly = true)
     {
         $this->readOnly = $readOnly;
         return $this;
@@ -230,9 +232,17 @@ abstract class InputForm
      * @param string $property
      * @return boolean
      */
-    public function isPropertySet($property)
+    final public function isPropertySet($property)
     {
         return isset($this->$property);
+    }
+
+    /**
+     * @return string
+     */
+    final public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -262,6 +272,28 @@ abstract class InputForm
      * @return string
      */
     abstract protected function getType();
+
+    /**
+     * Récupérer la valeur soumise
+     * @param null $default
+     * @return mixed
+     */
+    public function getSubmittedValue($default = null)
+    {
+        return Tools::getValue($this->name, $default);
+    }
+
+    /**
+     * Remplissage du helper form
+     * @param HelperForm $form
+     * @param $value
+     * @return self
+     */
+    public function fillForm(HelperForm $form, $value)
+    {
+        $form->fields_value[$this->name] = $value;
+        return $this;
+    }
 
     /**
      * To PrestaShop array

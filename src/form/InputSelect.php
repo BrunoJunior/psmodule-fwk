@@ -25,47 +25,13 @@
 
 namespace bdesprez\psmodulefwk\form;
 
-use bdesprez\psmodulefwk\ILabeledKeys;
-
 /**
  * Description of InputSelect
  *
  * @author bruno
  */
-class InputSelect extends InputForm
+class InputSelect extends InputFormWithOptions
 {
-
-    /**
-     * Options
-     * @var array
-     */
-    private $options;
-
-    /**
-     * Select input
-     * @param ILabeledKeys $labeledKeys
-     * @param string $name
-     * @param array $options ['query' => $array_of_rows, 'id' => 'id_carrier']
-     * @return InputSelect
-     */
-    public static function getInstance(ILabeledKeys $labeledKeys, $name, array $options)
-    {
-        $input = new InputSelect($name, $labeledKeys->getLabelByKey($name));
-        $input->options = $options;
-        return $input;
-    }
-
-    /**
-     * Attributs spécifiques au type
-     * @return array
-     */
-    protected function getPrestaShopArrayFormat()
-    {
-        return [
-            'options' => $this->options,
-        ];
-    }
-
     /**
      * select
      * @return string
@@ -73,20 +39,6 @@ class InputSelect extends InputForm
     protected function getType()
     {
         return static::TYPE_SELECT;
-    }
-
-    /**
-     * @param array $array
-     * @param string $idKey
-     * @param string $valueKey
-     * @return array
-     */
-    public static function arrayToOptions(array $array, $idKey = 'id', $valueKey = 'value') {
-        return [
-            'query' => $array,
-            'id' => $idKey,
-            'name' => $valueKey,
-        ];
     }
 
 }

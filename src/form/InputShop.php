@@ -30,20 +30,8 @@ namespace bdesprez\psmodulefwk\form;
  *
  * @author bruno
  */
-class InputShop extends InputForm
+class InputShop extends InputLabeledKeys
 {
-
-    /**
-     * Input shop instance
-     * @param string $name
-     * @param string $label
-     * @return InputShop
-     */
-    public static function getInstance($name, $label)
-    {
-        return new InputShop($name, $label);
-    }
-
     /**
      * shop
      * @return string

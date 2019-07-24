@@ -25,13 +25,21 @@
 
 namespace bdesprez\psmodulefwk\conf;
 
+use bdesprez\psmodulefwk\form\InputForm;
+use bdesprez\psmodulefwk\helpers\Conf;
+use HelperForm;
+
+/**
+ * Class ConfElement
+ * @package bdesprez\psmodulefwk\conf
+ */
 class ConfElement
 {
     /**
-     * Nom de la conf
-     * @var string
+     * Input lié
+     * @var InputForm
      */
-    private $name;
+    private $input;
 
     /**
      * Valeur par défaut
@@ -46,22 +54,16 @@ class ConfElement
     private $allShops = true;
 
     /**
-     * Valeurs possibles
-     * @var array
-     */
-    private $possibleValues;
-
-    /**
      * ConfElement constructor.
-     * @param $name
+     * @param InputForm $input
      * @param $defaultValue
-     * @param array $possibleValues
+     * @param bool $allShops
      */
-    public function __construct($name, $defaultValue, $possibleValues = [])
+    public function __construct(InputForm $input, $defaultValue, $allShops = true)
     {
-        $this->name = $name;
+        $this->input = $input;
         $this->defaultValue = $defaultValue;
-        $this->possibleValues = $possibleValues;
+        $this->allShops = $allShops;
     }
 
     /**
@@ -73,21 +75,11 @@ class ConfElement
     }
 
     /**
-     * @param bool $allShops
-     * @return static
+     * @return InputForm
      */
-    public function setAllShops($allShops = true)
+    public function getInput()
     {
-        $this->allShops = $allShops;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
+        return $this->input;
     }
 
     /**
@@ -99,11 +91,36 @@ class ConfElement
     }
 
     /**
-     * @return array
+     * Installation = valeur par défaut dans la conf
+     * @return bool
      */
-    public function getPossibleValues()
+    public function install()
     {
-        return $this->possibleValues;
+        return Conf::setValeur($this->input->getName(), $this->defaultValue, $this->allShops);
     }
 
+    /**
+     * Désinstallation = Suppression de la conf
+     * @return bool
+     */
+    public function uninstall()
+    {
+        return Conf::removeValeur($this->input->getName());
+    }
+
+    /**
+     * @param HelperForm $form
+     */
+    public function fillForm(HelperForm $form)
+    {
+        $this->input->fillForm($form, Conf::getValeur($this->input->getName()));
+    }
+
+    /**
+     * Enregistrement dans la conf
+     */
+    public function treatSubmit()
+    {
+        Conf::setValeur($this->input->getName(), $this->input->getSubmittedValue($this->defaultValue), $this->allShops);
+    }
 }
