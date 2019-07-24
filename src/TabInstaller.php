@@ -25,12 +25,7 @@
 
 namespace bdesprez\psmodulefwk;
 
-use AdminController;
 use Language;
-use Module;
-use PrestaShopException;
-use PrestaShopModuleException;
-use Tab;
 
 /**
  * Description of TabInstaller
@@ -42,13 +37,20 @@ class TabInstaller
     const NO_PARENT = '#NULL#';
 
     const PARENT_DEFAULT = 'DEFAULT';
-    const PARENT_CONFIGURE = 'CONFIGURE';
-    const PARENT_IMPROVE = 'IMPROVE';
     const PARENT_SELL = 'SELL';
-    
+    const PARENT_SELL_ORDERS = 'AdminParentOrders';
+    const PARENT_SELL_CATALOG = 'AdminCatalog';
+    const PARENT_SELL_CUSTOMER = 'AdminParentCustomer';
+    const PARENT_SELL_SAV = 'AdminParentCustomerThreads';
+    const PARENT_SELL_STATS = 'AdminStats';
+    const PARENT_SELL_STOCK = 'AdminStock';
+    const PARENT_IMPROVE = 'IMPROVE';
+    const PARENT_IMPROVE_MODULE = 'AdminParentModulesSf';
+    const PARENT_CONFIGURE = 'CONFIGURE';
+
     /**
      * Module
-     * @var Module
+     * @var MyModule
      */
     private $module;
     
@@ -63,19 +65,13 @@ class TabInstaller
      * @var array
      */
     private $tabs = [];
-
-    /**
-     * No parent tabs
-     * @var array
-     */
-    private $noParents = [];
     
     /**
      * Construct
-     * @param Module $module
+     * @param MyModule $module
      * @param string $parent
      */
-    public function __construct(Module $module, $parent)
+    public function __construct(MyModule $module, $parent)
     {
         $this->module = $module;
         $this->parentTabName = $parent;
@@ -85,103 +81,16 @@ class TabInstaller
      * @param $controller
      * @param $label
      * @param null $icon
+     * @param bool $visible
      * @return $this
-     * @throws PrestaShopModuleException
      */
-    public function addController($controller, $label, $icon = null)
+    public function addController($controller, $label, $icon = null, $visible = true)
     {
-        if (!is_a($controller, AdminController::class)) {
-            throw new PrestaShopModuleException('Controller must be an instance of AdminController');
-        }
-        $this->tabs[$controller] = ['label' => [], 'icon' => $icon];
+        $this->tabs[$controller] = ['label' => [], 'icon' => $icon, 'visible' => $visible];
         foreach (Language::getLanguages(true) as $lang) {
             $this->tabs[$controller]['label'][$lang['id_lang']] = $label;
         }
         return $this;
-    }
-
-    /**
-     * Add a tab without parent
-     * @param $tabName
-     * @return $this
-     */
-    public function tabWithoutParent($tabName) {
-        $this->noParents[$tabName] = true;
-        return $this;
-    }
-
-    /**
-     * @param $controller
-     * @return array
-     */
-    private function getTab($controller) {
-        if (array_key_exists($controller, $this->tabs)) {
-            return $this->tabs[$controller];
-        }
-        return [];
-    }
-
-    /**
-     * Install tabs
-     * @return boolean
-     */
-    public function install()
-    {
-        $tabParent = $this->addTabIfNotExists($this->parentTabName, $this->getTab($this->parentTabName));
-        $isOk = $tabParent !== false;
-        foreach ($this->tabs as $classname => $arrtab) {
-            if ($classname === $this->parentTabName) {
-                continue;
-            }
-            $isOk &= $this->addTabIfNotExists($classname, $arrtab, $tabParent) !== false;
-        }
-        return $isOk;
-    }
-
-    /**
-     * Uninstall tabs
-     * @return boolean
-     * @throws PrestaShopException
-     */
-    public function uninstall()
-    {
-        foreach (array_reverse(array_keys($this->tabs)) as $name) {
-            Tab::getInstanceFromClassName($name)->delete();
-        }
-        return true;
-    }
-
-    /**
-     * Add a tab if it not exists yet
-     * @param string $className
-     * @param array $arrTab
-     * @param Tab $parent
-     * @return Tab|false
-     */
-    private function addTabIfNotExists($className, array $arrTab, Tab $parent = NULL)
-    {
-        // Fake parent tab with id -1
-        $isWithoutParent = array_key_exists($className, $this->noParents);
-        $tab = Tab::getInstanceFromClassName($className);
-        if (empty($tab->id)) {
-            $tab->module = $this->module->name;
-            $tab->active = 1;
-            $tab->class_name = $className;
-            if ($isWithoutParent) {
-                $tab->id_parent = -1;
-            } elseif ($parent instanceof Tab) {
-                $tab->id_parent = $parent->id;
-            }
-            $tab->name = $arrTab['label'];
-            $tab->icon = $arrTab['icon'];
-            if (!$tab->add()) {
-                return false;
-            }
-        } elseif (!empty($arrTab['label'])) {
-            $tab->name = $arrTab['label'];
-            $tab->update();
-        }
-        return $tab;
     }
 
     /**
@@ -192,6 +101,7 @@ class TabInstaller
         $tabs = [];
         foreach ($this->tabs as $key => $value) {
             $tabs[] = [
+                'visible' => $value['visible'],
                 'name' => $value['label'],
                 'class_name' => $key,
                 'ParentClassName' => $this->parentTabName ?: static::PARENT_DEFAULT,
