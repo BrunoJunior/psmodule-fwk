@@ -25,8 +25,6 @@
 
 namespace bdesprez\psmodulefwk;
 
-use Language;
-
 /**
  * Description of TabInstaller
  *
@@ -86,7 +84,7 @@ class TabInstaller
      */
     public function addController($controller, $label, $icon = null, $visible = true)
     {
-        $this->tabs[$controller] = ['label' => $label, 'icon' => $icon, 'visible' => $visible];
+        $this->tabs[$controller] = ['label' => $label, 'visible' => $visible, 'icon' => $icon];
         return $this;
     }
 
@@ -97,14 +95,17 @@ class TabInstaller
     public function toPsTabs() {
         $tabs = [];
         foreach ($this->tabs as $key => $value) {
-            $tabs[] = [
+            $tab = [
                 'visible' => $value['visible'],
                 'name' => $value['label'],
-                'class_name' => $key,
+                'class_name' => substr($key, -10) === 'Controller' ? substr($key, 0, -10) : $key,
                 'ParentClassName' => $this->parentTabName ?: static::PARENT_DEFAULT,
                 'parent_class_name' => $this->parentTabName ?: static::PARENT_DEFAULT,
-                'icon' => $value['icon'],
             ];
+            if ($value['icon']) {
+                $tab['icon'] = $value['icon'];
+            }
+            $tabs[] = $tab;
         }
         return $tabs;
     }
