@@ -79,17 +79,14 @@ class TabInstaller
 
     /**
      * @param $controller
-     * @param $label
+     * @param string|array $label
      * @param null $icon
      * @param bool $visible
      * @return $this
      */
     public function addController($controller, $label, $icon = null, $visible = true)
     {
-        $this->tabs[$controller] = ['label' => [], 'icon' => $icon, 'visible' => $visible];
-        foreach (Language::getLanguages(true) as $lang) {
-            $this->tabs[$controller]['label'][$lang['id_lang']] = $label;
-        }
+        $this->tabs[$controller] = ['label' => $label, 'icon' => $icon, 'visible' => $visible];
         return $this;
     }
 
@@ -105,6 +102,7 @@ class TabInstaller
                 'name' => $value['label'],
                 'class_name' => $key,
                 'ParentClassName' => $this->parentTabName ?: static::PARENT_DEFAULT,
+                'parent_class_name' => $this->parentTabName ?: static::PARENT_DEFAULT,
                 'icon' => $value['icon'],
             ];
         }
