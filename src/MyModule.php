@@ -65,6 +65,11 @@ abstract class MyModule extends Module
     private $configurations = [];
 
     /**
+     * @var array
+     */
+    public $tabs = [];
+
+    /**
      * MyModule constructor.
      * @throws PrestaShopException
      */
