@@ -21,7 +21,7 @@ function callBJAjaxAction(button, action, data, reactivateOnComplete) {
     const finalData = Object.assign({
         action: 'Action',
         my_action: action,
-        ajax: true
+        ajax: 1
     }, data);
     return new Promise(function (resolve, reject) {
         $.ajax({
@@ -32,6 +32,8 @@ function callBJAjaxAction(button, action, data, reactivateOnComplete) {
             success: function (retour) {
                 if (retour === undefined || retour === null) {
                     addBJErrorMessage('No return !');
+                    reject('no return !');
+                    return;
                 }
                 if (retour.error) {
                     const errors = retour.error.split(', ');

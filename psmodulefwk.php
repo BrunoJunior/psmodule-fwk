@@ -38,7 +38,7 @@ use bdesprez\psmodulefwk\helpers\LoggerFactory;
 class PsModuleFwk extends Module
 {
     // Version interne modifiée automatiquement lors du packaging
-    public $internalVersion = '201907261616';
+    public $internalVersion = '201907272350';
 
     /**
      * Constructeur
@@ -94,7 +94,11 @@ class PsModuleFwk extends Module
      */
     public function hookActionAdminControllerSetMedia()
     {
+        $controller = $this->context->controller;
         $moduleName = \bdesprez\psmodulefwk\helpers\StdClass::getInstance((object) $this->context->smarty->tpl_vars)->get('module_name')->getValeur('value');
+        if ($controller instanceof ModuleAdminController) {
+            $moduleName = $controller->module->name;
+        }
         $this->getLogger()->log('Module context : ' . $moduleName);
         if ($moduleName && in_array($this->name, Module::getInstanceByName($moduleName)->dependencies)) {
             $this->context->controller->addJS($this->_path . '/views/js/main.js');
