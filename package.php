@@ -42,7 +42,7 @@ $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 echo 'Zip initialized' . PHP_EOL;
 
 // Will exclude everything under these directories
-$excludeDir = ['.svn', 'skeleton'];
+$excludeDir = ['.svn', 'skeleton', '.git', '.idea'];
 $start = '.*[/\\\]'.$options['m'];
 $excludeFiles = [
     $start.'[/\\\]init_module\\.php',
